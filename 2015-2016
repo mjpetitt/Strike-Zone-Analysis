@@ -1,53 +1,46 @@
+Low_Inside_16 <- final_2016_2 %>% filter(between(plate_x, -1.01, -0.33), between(plate_z, 1.4, 2.17))
+Low_Middle_16 <- final_2016_2 %>% filter(between(plate_x, -0.33, 0.33), between(plate_z, 1.49, 2.17))
+Low_Outside_16 <- final_2016_2 %>% filter(between(plate_x, 0.33, 1.01), between(plate_z, 1.49, 2.17))
+Middle_Inside_16 <- final_2016_2 %>% filter(between(plate_x, -1.01, -0.33), between(plate_z, 2.18, 2.84))
+Middle_Middle_16 <- final_2016_2 %>% filter(between(plate_x, -0.33, 0.33), between(plate_z, 2.18, 2.84))
+Middle_Outside_16 <- final_2016_2 %>% filter(between(plate_x, 0.33, 1.01), between(plate_z, 2.18, 2.84))
+High_Inside_16 <- final_2016_2 %>% filter(between(plate_x, -1.01, -0.33), between(plate_z, 2.85, 3.51))
+High_Middle_16 <- final_2016_2 %>% filter(between(plate_x, -0.33, 0.33), between(plate_z, 2.85, 3.51))
+High_Outside_16 <- final_2016_2 %>% filter(between(plate_x, 0.33, 1.01), between(plate_z, 2.85, 3.51))
 
-Low_Inside_16 <- final_2016 %>%
-mutate(low_inside_zone = between(plate_x, -1.1, -.333) & between(plate_z, 1.49, 2.17)) %>%
-group_by(pitcher_name) %>%
-summarize(low_inside_percent = sum(low_inside_zone)/n())
-
-Low_Inside_16 <- final_2016_2 %>% filter(between(plate_x, -1.01, -0.33), between(plate_z, 1.49, 2.17))
 LI_zone_analysis_16 <- final_2016_2 %>%
-mutate(LI_zone = ifelse(between(plate_x, -1.10, -0.33) &
+mutate(LI_zone = ifelse(between(plate_x, -1.01, -0.33) &
 between(plate_z, 1.49, 2.17), 1, 0)) %>%
-group_by(pitcher_name, game_year) %>%
+group_by(pitcher_name, game_year, p_throws) %>%
 summarise(n_of_pitches = n(),
 prop_LI_zone = sum(LI_zone)/n_of_pitches)
 
-Low_Middle_16 <- final_2016_2 %>% filter(between(plate_x, -0.33, 0.33), between(plate_z, 1.49, 2.17))
 LM_zone_analysis_16 <- final_2016_2 %>%
 mutate(LM_zone = ifelse(between(plate_x, -0.33, 0.33) &
-between(plate_z, 1.49, 2.17), 1, 0)) %>%
-group_by(pitcher_name, game_year) %>%
+between(plate_z, 1.40, 2.17), 1, 0)) %>%
+group_by(pitcher_name, game_year, p_throws) %>%
 summarise(n_of_pitches = n(),
 prop_LM_zone = sum(LM_zone)/n_of_pitches)
-View(LM_zone_analysis_16)
-Low_Outside_16 <- final_2016_2 %>% filter(between(plate_x, 0.33, 1.01), between(plate_z, 1.49, 2.17))
-ggplot(Low_Outside_16, aes(plate_x, plate_z)) + scale_x_continuous(limits = c(-3,3)) + scale_y_continuous(limits = c(0,5)) + annotate("rect", xmin = -1, xmax = 1, ymin = 1.5, ymax = 3.5, color = "red", alpha = 0, size=2, linetype=2) + labs(title = "Custom Outside Strike Zone") + ylab("Horizontal Location (ft.)") + xlab("Vertical Location (ft): Catcher's View") + labs(color = "Velocity (mph)") + geom_point(alpha = .2) + facet_wrap(~game_year) + theme(strip.text = element_text(face="bold", size=16))+ theme(plot.title = element_text(size=22))+theme(plot.title = element_text(hjust = 0.5)) +facet_wrap(~stand)
-LO_zone_analysis_16 <- final_2016_2 %>%
-mutate(LO_zone = ifelse(between(plate_x, 0.33, 1.01) &
-between(plate_z, 1.49, 2.17), 1, 0)) %>%
-group_by(pitcher_name, game_year) %>%
-summarise(n_of_pitches = n(),
-prop_LO_zone = sum(LO_zone)/n_of_pitches)
-View(LO_zone_analysis_16)
+
 LO_zone_analysis_16 <- final_2016_2 %>%
 mutate(LO_zone = ifelse(between(plate_x, 0.33, 1.01) &
 between(plate_z, 1.49, 2.17), 1, 0)) %>%
 group_by(pitcher_name, game_year, p_throws) %>%
 summarise(n_of_pitches = n(),
 prop_LO_zone = sum(LO_zone)/n_of_pitches)
-Middle_Inside_16 <- final_2016_2 %>% filter(between(plate_x, -1.01, -0.33), between(plate_z, 2.18, 2.84))
-ggplot(Middle_Inside_16, aes(plate_x, plate_z)) + scale_x_continuous(limits = c(-3,3)) + scale_y_continuous(limits = c(0,5)) + annotate("rect", xmin = -1, xmax = 1, ymin = 1.5, ymax = 3.5, color = "red", alpha = 0, size=2, linetype=2) + labs(title = "Custom Outside Strike Zone") + ylab("Horizontal Location (ft.)") + xlab("Vertical Location (ft): Catcher's View") + labs(color = "Velocity (mph)") + geom_point(alpha = .2) + facet_wrap(~game_year) + theme(strip.text = element_text(face="bold", size=16))+ theme(plot.title = element_text(size=22))+theme(plot.title = element_text(hjust = 0.5)) +facet_wrap(~stand)
+
+
 MI_zone_analysis_16 <- final_2016_2 %>%
 mutate(MI_zone = ifelse(between(plate_x, -1.01, -0.33) &
 between(plate_z, 2.18, 2.84), 1, 0)) %>%
-group_by(pitcher_name, game_year) %>%
+group_by(pitcher_name, game_year, p_throws) %>%
 summarise(n_of_pitches = n(),
 prop_MI_zone = sum(MI_zone)/n_of_pitches)
+
+
 View(MI_zone_analysis_16)
-Middle_Middle_16 <- final_2016_2 %>% filter(between(plate_x, -0.33, 0.33), between(plate_z, 2.18, 2.84))
 View(Middle_Middle_16)
 ggplot(Middle_Middle_16, aes(plate_x, plate_z)) + scale_x_continuous(limits = c(-3,3)) + scale_y_continuous(limits = c(0,5)) + annotate("rect", xmin = -1, xmax = 1, ymin = 1.5, ymax = 3.5, color = "red", alpha = 0, size=2, linetype=2) + labs(title = "Custom Outside Strike Zone") + ylab("Horizontal Location (ft.)") + xlab("Vertical Location (ft): Catcher's View") + labs(color = "Velocity (mph)") + geom_point(alpha = .2) + facet_wrap(~game_year) + theme(strip.text = element_text(face="bold", size=16))+ theme(plot.title = element_text(size=22))+theme(plot.title = element_text(hjust = 0.5)) +facet_wrap(~stand)
-Middle_Outside_16 <- final_2016_2 %>% filter(between(plate_x, 0.33, 1.01), between(plate_z, 2.18, 2.84))
 ggplot(Middle_Outside_16, aes(plate_x, plate_z)) + scale_x_continuous(limits = c(-3,3)) + scale_y_continuous(limits = c(0,5)) + annotate("rect", xmin = -1, xmax = 1, ymin = 1.5, ymax = 3.5, color = "red", alpha = 0, size=2, linetype=2) + labs(title = "Custom Outside Strike Zone") + ylab("Horizontal Location (ft.)") + xlab("Vertical Location (ft): Catcher's View") + labs(color = "Velocity (mph)") + geom_point(alpha = .2) + facet_wrap(~game_year) + theme(strip.text = element_text(face="bold", size=16))+ theme(plot.title = element_text(size=22))+theme(plot.title = element_text(hjust = 0.5)) +facet_wrap(~stand)
 MM_zone_analysis_16 <- final_2016_2 %>%
 mutate(MM_zone = ifelse(between(plate_x, -0.33, 0.33) &
@@ -69,9 +62,6 @@ between(plate_z, 2.18, 2.84), 1, 0)) %>%
 group_by(pitcher_name, game_year, p_throws, stand) %>%
 summarise(n_of_pitches = n(),
 prop_MO_zone = sum(MO_zone)/n_of_pitches)
-High_Inside_16 <- final_2016_2 %>% filter(between(plate_x, -1.01, -0.33), between(plate_z, 2.85, 3.51))
-High_Middle_16 <- final_2016_2 %>% filter(between(plate_x, -0.33, 0.33), between(plate_z, 2.85, 3.51))
-High_Outside_16 <- final_2016_2 %>% filter(between(plate_x, 0.33, 1.01), between(plate_z, 2.85, 3.51))
 ggplot(High_Outside_16, aes(plate_x, plate_z)) + scale_x_continuous(limits = c(-3,3)) + scale_y_continuous(limits = c(0,5)) + annotate("rect", xmin = -1, xmax = 1, ymin = 1.5, ymax = 3.5, color = "red", alpha = 0, size=2, linetype=2) + labs(title = "Custom Outside Strike Zone") + ylab("Horizontal Location (ft.)") + xlab("Vertical Location (ft): Catcher's View") + labs(color = "Velocity (mph)") + geom_point(alpha = .2) + facet_wrap(~game_year) + theme(strip.text = element_text(face="bold", size=16))+ theme(plot.title = element_text(size=22))+theme(plot.title = element_text(hjust = 0.5)) +facet_wrap(~stand)
 HI_zone_analysis_16 <- final_2016_2 %>%
 mutate(HI_zone = ifelse(between(plate_x, -1.01, -0.33) &
