@@ -15,6 +15,11 @@ group_by(pitcher_name, game_year, p_throws) %>%
 summarise(n_of_pitches = n(),
 prop_LI_zone = sum(LI_zone)/n_of_pitches)
 
+LI_zone_analysis_16 <- mutate(LI_zone_analysis_16, prop_LI_zone = prop_LI_zone*100)
+
+LI_zone_analysis_16$prop_LI_zone <-round(LI_zone_analysis_16$prop_LI_zone, 1)
+
+
 LM_zone_analysis_16 <- final_2016_2 %>%
 mutate(LM_zone = ifelse(between(plate_x, -0.33, 0.33) &
 between(plate_z, 1.40, 2.17), 1, 0)) %>%
