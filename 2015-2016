@@ -29,11 +29,25 @@ LI_zone_analysis_16 <- mutate(LI_zone_analysis_16, prop_LI_zone_plus = ((prop_LI
 LI_zone_analysis_16$prop_LI_zone_plus <-round(LI_zone_analysis_16$prop_LI_zone_plus, 0)
 
 LM_zone_analysis_16 <- final_2016_2 %>%
-mutate(LM_zone = ifelse(between(plate_x, -0.33, 0.33) &
-between(plate_z, 1.40, 2.17), 1, 0)) %>%
-group_by(pitcher_name, game_year, p_throws) %>%
-summarise(n_of_pitches = n(),
-prop_LM_zone = sum(LM_zone)/n_of_pitches)
+  mutate(LM_zone = ifelse(between(plate_x, -0.33, 0.33) &
+                            between(plate_z, 1.40, 2.17), 1, 0)) %>%
+  group_by(pitcher_name, game_year, p_throws) %>%
+  summarise(n_of_pitches = n(),
+            prop_LM_zone = sum(LM_zone)/n_of_pitches)
+
+LM_zone_analysis_16 <- filter(LM_zone_analysis_16, n_of_pitches >= 100)
+
+LM_zone_analysis_year_avg_16 <- LM_zone_analysis_16 %>% group_by(game_year) %>%  
+  summarise(Mean_LM_Zone = mean(prop_LM_zone)) 
+
+LM_zone_analysis_16 <- merge(LM_zone_analysis_16, LM_zone_analysis_year_avg_16, by="game_year") 
+
+LM_zone_analysis_16 <- mutate(LM_zone_analysis_16, prop_LM_zone_plus = ((prop_LM_zone)-(Mean_LM_Zone)))
+LM_zone_analysis_16 <- mutate(LM_zone_analysis_16, prop_LM_zone_plus = ((prop_LM_zone_plus)/(Mean_LM_Zone)))
+LM_zone_analysis_16 <- mutate(LM_zone_analysis_16, prop_LM_zone_plus = ((prop_LM_zone_plus)*(100))) 
+LM_zone_analysis_16 <- mutate(LM_zone_analysis_16, prop_LM_zone_plus = ((prop_LM_zone_plus)+(100)))
+LM_zone_analysis_16$prop_LM_zone_plus <-round(LM_zone_analysis_16$prop_LM_zone_plus, 0)
+
 
 LO_zone_analysis_16 <- final_2016_2 %>%
 mutate(LO_zone = ifelse(between(plate_x, 0.33, 1.01) &
