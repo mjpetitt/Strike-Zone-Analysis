@@ -59,5 +59,76 @@ HO_woba_16 <- filter(HO_woba_16, events != "batter_interference", events != "cau
 HO_woba_16 <- HO_woba_16 %>% group_by(pitcher_name) %>% summarise(n_of_pitches = n(), woba=sum(woba_value/n()))
 HO_woba_16$woba <-round(HO_woba_16$woba, 3)
 
+#Calculating xwoba by individual zone
+Lower_Zone_GD_16 <- filter(final_2016_2, zone==7 | zone== 8 | zone==9)
+woba_16 <- filter(Lower_Zone_GD_16, events !="")
+woba_16 <- filter(woba_16, events != "batter_interference", events != "caught_stealing_2b", events != "caught_stealing_3b", events != "caught_stealing_home", events != "other_out", events != "pickoff_1b", events != "pickoff_2b", events != "pickoff_caught_stealing_2b", events != "pickoff_caught_stealing_3b", events != "run", events !="pickoff_caught_stealing_home")
+woba_16 <- woba_16 %>% group_by(pitcher_name) %>% summarise(n_of_pitches = n(), woba=sum(woba_value/n()))
+woba_16$woba <-round(woba_16$woba, 3)
+
+Upper_Zone_GD_16 <- filter(final_2016_2, zone==1 | zone== 2 | zone==3)
+xWOBA_16 <- filter(Upper_Zone_GD_16, events != "", events != "catcher_interf", events != "caught_stealing_2b", events != "caught_stealing_3b", events != "caught_stealing_home", events != "other_out", events != "pickoff_1b", events != "pickoff_2b", events != "pickoff_caught_stealing_2b", events != "pickoff_caught_stealing_3b",  events != "pickoff_caught_stealing_home", events != "run")
+xWOBA2 <- filter(xWOBA_16, events=="walk" | events=="hit_by_pitch" | events=="intent_walk")
+xWOBA3 <- mutate(xWOBA2, xWOBA = woba_value*1)
+xWOBA5 <- filter(xWOBA_16, events!= "walk", events!= "hit_by_pitch", events!= "intent_walk")
+xWOBA4 <- mutate(xWOBA5, xWOBA = estimated_woba_using_speedangle*1)
+xWOBA2 <- rbind(xWOBA3, xWOBA4)
+xWOBA_final_16 <- xWOBA2 %>% group_by(pitcher_name) %>% summarise(n_of_pitches = n(), xWOBA=sum(xWOBA/n()))
+xWOBA_final_16$xWOBA <-round(xWOBA_final_16$xWOBA, 3)
+
+Low_Inside_16 <- final_2016_2 %>% filter(between(plate_x, -1.01, -0.33), between(plate_z, 1.49, 2.17))
+LI_xWOBA_16 <- filter(Low_Inside_16, events != "", events != "catcher_interf", events != "caught_stealing_2b", events != "caught_stealing_3b", events != "caught_stealing_home", events != "other_out", events != "pickoff_1b", events != "pickoff_2b", events != "pickoff_caught_stealing_2b", events != "pickoff_caught_stealing_3b",  events != "pickoff_caught_stealing_home", events != "run")
+LI_xWOBA2 <- filter(LI_xWOBA_16, events=="walk" | events=="hit_by_pitch" | events=="intent_walk")
+LI_xWOBA3 <- mutate(LI_xWOBA2, xWOBA = woba_value*1)
+LI_xWOBA5 <- filter(LI_xWOBA_16, events!= "walk", events!= "hit_by_pitch", events!= "intent_walk")
+LI_xWOBA4 <- mutate(LI_xWOBA5, xWOBA = estimated_woba_using_speedangle*1)
+LI_xWOBA2 <- rbind(LI_xWOBA3, LI_xWOBA4)
+LI_xWOBA_final_16 <- LI_xWOBA2 %>% group_by(pitcher_name) %>% summarise(n_of_pitches = n(), xWOBA=sum(xWOBA/n()))
+LI_xWOBA_final_16$xWOBA <-round(LI_xWOBA_final_16$xWOBA, 3)
+
+Low_Middle_16 <- final_2016_2 %>% filter(between(plate_x, -0.34, 0.33), between(plate_z, 1.49, 2.17))
+LM_xWOBA_16 <- filter(Low_Middle_16, events != "", events != "catcher_interf", events != "caught_steaLMng_2b", events != "caught_steaLMng_3b", events != "caught_steaLMng_home", events != "other_out", events != "pickoff_1b", events != "pickoff_2b", events != "pickoff_caught_steaLMng_2b", events != "pickoff_caught_steaLMng_3b",  events != "pickoff_caught_steaLMng_home", events != "run")
+LM_xWOBA2 <- filter(LM_xWOBA_16, events=="walk" | events=="hit_by_pitch" | events=="intent_walk")
+LM_xWOBA3 <- mutate(LM_xWOBA2, xWOBA = woba_value*1)
+LM_xWOBA5 <- filter(LM_xWOBA_16, events!= "walk", events!= "hit_by_pitch", events!= "intent_walk")
+LM_xWOBA4 <- mutate(LM_xWOBA5, xWOBA = estimated_woba_using_speedangle*1)
+LM_xWOBA2 <- rbind(LM_xWOBA3, LM_xWOBA4)
+LM_xWOBA_final_16 <- LM_xWOBA2 %>% group_by(pitcher_name) %>% summarise(n_of_pitches = n(), xWOBA=sum(xWOBA/n()))
+LM_xWOBA_final_16$xWOBA <-round(LM_xWOBA_final_16$xWOBA, 3)
+
+Low_Outside_16 <- final_2016_2 %>% filter(between(plate_x, 0.34, 1.01), between(plate_z, 1.49, 2.17))
+LO_xWOBA_16 <- filter(Low_Outside_16, events != "", events != "catcher_interf", events != "caught_steaLMng_2b", events != "caught_steaLMng_3b", events != "caught_steaLMng_home", events != "other_out", events != "pickoff_1b", events != "pickoff_2b", events != "pickoff_caught_steaLMng_2b", events != "pickoff_caught_steaLMng_3b",  events != "pickoff_caught_steaLMng_home", events != "run")
+LO_xWOBA2 <- filter(LO_xWOBA_16, events=="walk" | events=="hit_by_pitch" | events=="intent_walk")
+LO_xWOBA3 <- mutate(LO_xWOBA2, xWOBA = woba_value*1)
+LO_xWOBA5 <- filter(LO_xWOBA_16, events!= "walk", events!= "hit_by_pitch", events!= "intent_walk")
+LO_xWOBA4 <- mutate(LO_xWOBA5, xWOBA = estimated_woba_using_speedangle*1)
+LO_xWOBA2 <- rbind(LO_xWOBA3, LO_xWOBA4)
+LO_xWOBA_final_16 <- LO_xWOBA2 %>% group_by(pitcher_name) %>% summarise(n_of_pitches = n(), xWOBA=sum(xWOBA/n()))
+LO_xWOBA_final_16$xWOBA <-round(LO_xWOBA_final_16$xWOBA, 3)
+
+Middle_Inside_16 <- final_2016_2 %>% filter(between(plate_x, -1.01, -0.33), between(plate_z, 2.18, 2.84))
+MI_xWOBA_16 <- filter(Middle_Inside_16, events != "", events != "catcher_interf", events != "caught_steaLMng_2b", events != "caught_steaLMng_3b", events != "caught_steaLMng_home", events != "other_out", events != "pickoff_1b", events != "pickoff_2b", events != "pickoff_caught_steaLMng_2b", events != "pickoff_caught_steaLMng_3b",  events != "pickoff_caught_steaLMng_home", events != "run")
+MI_xWOBA2 <- filter(MI_xWOBA_16, events=="walk" | events=="hit_by_pitch" | events=="intent_walk")
+MI_xWOBA3 <- mutate(MI_xWOBA2, xWOBA = woba_value*1)
+MI_xWOBA5 <- filter(MI_xWOBA_16, events!= "walk", events!= "hit_by_pitch", events!= "intent_walk")
+MI_xWOBA4 <- mutate(MI_xWOBA5, xWOBA = estimated_woba_using_speedangle*1)
+MI_xWOBA2 <- rbind(MI_xWOBA3, MI_xWOBA4)
+MI_xWOBA_final_16 <- MI_xWOBA2 %>% group_by(pitcher_name) %>% summarise(n_of_pitches = n(), xWOBA=sum(xWOBA/n()))
+MI_xWOBA_final_16$xWOBA <-round(MI_xWOBA_final_16$xWOBA, 3)
+
+Middle_Outside_16 <- final_2016_2 %>% filter(between(plate_x, 0.33, 1.01), between(plate_z, 2.18, 2.84))
+MO_xWOBA_16 <- filter(Middle_Outside_16, events != "", events != "catcher_interf", events != "caught_steaLMng_2b", events != "caught_steaLMng_3b", events != "caught_steaLMng_home", events != "other_out", events != "pickoff_1b", events != "pickoff_2b", events != "pickoff_caught_steaLMng_2b", events != "pickoff_caught_steaLMng_3b",  events != "pickoff_caught_steaLMng_home", events != "run")
+MO_xWOBA2 <- filter(MO_xWOBA_16, events=="walk" | events=="hit_by_pitch" | events=="intent_walk")
+MO_xWOBA3 <- mutate(MO_xWOBA2, xWOBA = woba_value*1)
+MO_xWOBA5 <- filter(MO_xWOBA_16, events!= "walk", events!= "hit_by_pitch", events!= "intent_walk")
+MO_xWOBA4 <- mutate(MO_xWOBA5, xWOBA = estimated_woba_using_speedangle*1)
+MO_xWOBA2 <- rbind(MO_xWOBA3, MO_xWOBA4)
+MO_xWOBA_final_16 <- MO_xWOBA2 %>% group_by(pitcher_name) %>% summarise(n_of_pitches = n(), xWOBA=sum(xWOBA/n()))
+MO_xWOBA_final_16$xWOBA <-round(MO_xWOBA_final_16$xWOBA, 3)
+
+
+
+
+
 
 
