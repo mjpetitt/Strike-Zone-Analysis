@@ -1,1 +1,9 @@
+#Calculating woba by individual zone
+Lower_Zone_GD_16 <- filter(final_2016_2, zone==7 | zone== 8 | zone==9)
+woba_16 <- filter(Lower_Zone_GD_16, events !="")
+woba_16 <- filter(woba_16, events != "batter_interference", events != "caught_stealing_2b", events != "caught_stealing_3b", events != "caught_stealing_home", events != "other_out", events != "pickoff_1b", events != "pickoff_2b", events != "pickoff_caught_stealing_2b", events != "pickoff_caught_stealing_3b", events != "run", events !="pickoff_caught_stealing_home")
+
+woba_16 <- filter(final_2016, events !="")
+woba_16 <- filter(woba_16, events != "batter_interference", events != "caught_stealing_2b", events != "caught_stealing_3b", events != "caught_stealing_home", events != "other_out", events != "pickoff_1b", events != "pickoff_2b", events != "pickoff_caught_stealing_2b", events != "pickoff_caught_stealing_3b", events != "run", events !="pickoff_caught_stealing_home")
+woba_16 <- woba_16 %>% group_by(pitcher_name) %>% summarise(woba=sum(woba_value/n()))
 
