@@ -1,4 +1,4 @@
-Low_Inside_16 <- final_2016_2 %>% filter(between(plate_x, -1.01, -0.33), between(plate_z, 1.4, 2.17))
+Low_Inside_16 <- final_2016_2 %>% filter(between(plate_x, -1.01, -0.33), between(plate_z, 1.49, 2.17))
 Low_Middle_16 <- final_2016_2 %>% filter(between(plate_x, -0.33, 0.33), between(plate_z, 1.49, 2.17))
 Low_Outside_16 <- final_2016_2 %>% filter(between(plate_x, 0.33, 1.01), between(plate_z, 1.49, 2.17))
 Middle_Inside_16 <- final_2016_2 %>% filter(between(plate_x, -1.01, -0.33), between(plate_z, 2.18, 2.84))
