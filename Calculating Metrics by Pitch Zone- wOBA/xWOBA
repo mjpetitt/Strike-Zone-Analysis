@@ -156,7 +156,45 @@ HO_xWOBA2 <- rbind(HO_xWOBA3, HO_xWOBA4)
 HO_xWOBA_final_16 <- HO_xWOBA2 %>% group_by(pitcher_name) %>% summarise(n_of_pitches = n(), xWOBA=sum(xWOBA/n()))
 HO_xWOBA_final_16$xWOBA <-round(HO_xWOBA_final_16$xWOBA, 3)
 
+#Calculating Swinging Strike % by zone
+#Need to change foul tip on strike threes to swinging strikes
 
+Low_Inside_16 <- final_2016_2 %>% filter(between(plate_x, -1.01, -0.33), between(plate_z, 1.49, 2.17))
+foul_tip <- filter(Low_Inside_16, description=="foul_tip", events=="strikeout")
+foul_tip <- mutate(foul_tip, description = ifelse(grepl("foul", description), "swinging_strike_foul_tip","Other"))
+Low_Inside_16 <- filter(Low_Inside_16, events!="strikeout"| description!="foul_tip")
+LI_swstr_16<- rbind(Low_Inside_16, foul_tip)
+
+LI_SwStr_Rate_16 <- LI_swstr_16 %>% 
+  group_by(pitcher_name) %>%     
+  summarise(n_of_pitches = n(), Sw_Str_Rate=sum(str_detect(description,"swinging"))/n()) 
+LI_SwStr_Rate_16 <- mutate(LI_SwStr_Rate_16, Sw_Str_Rate = Sw_Str_Rate*100)
+LI_SwStr_Rate_16$Sw_Str_Rate <-round(LI_SwStr_Rate_16$Sw_Str, 1)
+
+Low_Middle_16 <- final_2016_2 %>% filter(between(plate_x, -0.34, 0.33), between(plate_z, 1.49, 2.17))
+foul_tip <- filter(Low_Middle_16, description=="foul_tip", events=="strikeout")
+foul_tip <- mutate(foul_tip, description = ifelse(grepl("foul", description), "swinging_strike_foul_tip","Other"))
+Middle_Inside_16 <- filter(Middle_Inside_16, events!="strikeout"| description!="foul_tip")
+LM_swstr_16<- rbind(Middle_Inside_16, foul_tip)
+
+LM_SwStr_Rate_16 <- LM_swstr_16 %>% 
+  group_by(pitcher_name) %>%     
+  summarise(n_of_pitches = n(), Sw_Str_Rate=sum(str_detect(description,"swinging"))/n()) 
+LM_SwStr_Rate_16 <- mutate(LM_SwStr_Rate_16, Sw_Str_Rate = Sw_Str_Rate*100)
+LM_SwStr_Rate_16$Sw_Str_Rate <-round(LM_SwStr_Rate_16$Sw_Str_Rate, 1)
+
+Low_Outside_16 <- final_2016_2 %>% filter(between(plate_x, 0.34, 1.01), between(plate_z, 1.49, 2.17))
+foul_tip <- filter(Low_Outside_16, description=="foul_tip", events=="strikeout")
+foul_tip <- mutate(foul_tip, description = ifelse(grepl("foul", description), "swinging_strike_foul_tip","Other"))
+Low_Outside_16 <- filter(Low_Outside_16, events!="strikeout"| description!="foul_tip")
+LO_swstr_16<- rbind(Low_Outside_16, foul_tip)
+
+LO_SwStr_Rate_16 <- LO_swstr_16 %>% 
+  group_by(pitcher_name) %>%     
+  summarise(n_of_pitches = n(), Sw_Str_Rate=sum(str_detect(description,"swinging"))/n()) 
+LO_SwStr_Rate_16 <- mutate(LO_SwStr_Rate_16, Sw_Str_Rate = Sw_Str_Rate*100)
+LO_SwStr_Rate_16$Sw_Str_Rate <-round(LO_SwStr_Rate_16$Sw_Str_Rate, 1)
+  
 
 
 
