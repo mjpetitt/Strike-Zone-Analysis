@@ -353,8 +353,16 @@ HM_CS_Rate_16 <- High_Middle_16 %>%
 HM_CS_Rate_16 <- mutate(HM_CS_Rate_16, CS_Rate = CS_Rate*100)
 HM_CS_Rate_16$CS_Rate <-round(HM_CS_Rate_16$CS_Rate, 1)
 
+LI_xWOBA_final_16_2 <- select(LI_xWOBA_final_16, pitcher_name,xWOBA)
+LI_zone_analysis_16_3 <- merge(LI_zone_analysis_16_2, LI_xWOBA_final_16_2, by="pitcher_name")
 
+LI_SwStr_Rate_16_2 <- select(LI_SwStr_Rate_16, pitcher_name, Sw_Str_Rate)
+LI_zone_analysis_16_4 <- merge(LI_zone_analysis_16_3, LI_SwStr_Rate_16_2, by="pitcher_name")
 
+LI_CS_Rate_16_2 <- select(LI_CS_Rate_16, pitcher_name, CS_Rate)
+LI_zone_analysis_16_5 <- merge(LI_zone_analysis_16_4, LI_CS_Rate_16_2, by="pitcher_name")
+
+LI_zone_analysis_16_7 <- mutate(LI_zone_analysis_16_7, Zone_Plus = (prop_LI_zone + n_of_pitches_IP)+((1-xWOBA)*(Sw_Str_Rate)))
 
 
   
