@@ -364,6 +364,12 @@ LI_zone_analysis_16_5 <- merge(LI_zone_analysis_16_4, LI_CS_Rate_16_2, by="pitch
 
 LI_zone_analysis_16_7 <- mutate(LI_zone_analysis_16_7, Zone_Plus = (prop_LI_zone + n_of_pitches_IP)+((1-xWOBA)*(Sw_Str_Rate)))
 
+LI_zone_analysis_16_7 <- mutate(LI_zone_analysis_16_7, Zone_Plus = ((prop_LI_zone * Sw_Str_Rate) +(prop_LI_zone*CS_Rate))*((1-xWOBA)))
+
+LI_zone_analysis_16_7 <- mutate(LI_zone_analysis_16_7, Zone_Plus = ((prop_LI_zone * Sw_Str_Rate) +(prop_LI_zone*CS_Rate))+((prop_LI_zone)*(1-xWOBA)))
+
+LI_zone_analysis_16_8 <- filter(LI_zone_analysis_16_7, n_of_pitches >= 100)
+
 
   
 
